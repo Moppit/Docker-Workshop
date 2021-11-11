@@ -17,7 +17,7 @@ You can install `flask` with the `pip3 install flask` command.
 Docker is hands-down the most popular containerization tool used in industry today. How does it work? In this workshop, we'll learn how to spin up a docker container to deploy an app!
 
 # Instructions
-1. Let's see what we have in this repository -- we've got this README, `app.py`, and `Dockerfile` (and `Dockerfile-Solns` for troubleshooting purposes, but no peeking because that's no fun!). The Python script outlines an app using Flask, and we will fill in the Dockerfile later to create a custom Docker image for our app. For now, let's try running our app locally to see what spinning up an app entails.
+1. Let's see what we have in this repository -- we've got this README and `app.py`. The Python script `app.py` outlines a locally hosted web app using Flask, and we will use it as a sample app to deploy. Before we try any Docker shenanigans, let's try running our app locally to see what spinning up an app (in general) entails.
     
     a. Type `python3 app.py` in your terminal. What do you get as output? It's usually one of these outcomes:
         
@@ -42,7 +42,7 @@ mkdir my-app && cd my-app
 
 6. Now we can add our features of our environment that we want image to support:
     
-    a. Start with a root image provided by Docker. Since we are only using Python for our app, using the standard Python image works well here. Add the following to your  `Dockerfile`:
+    a. Start with a root image provided by Docker. Since we are only using Python for our app, using the standard Python image works well here. Add the following to your  `Dockerfile` to use the Python image and add our current code (`app.py`) to our working directory:
     ```
     FROM python:3.7-alpine
     ADD . /code
@@ -65,7 +65,7 @@ mkdir my-app && cd my-app
     EXPOSE 5000
     ```
 
-    e. Last but not least, we specify what command to use to run the app.
+    e. Last but not least, we specify what command to use to run the app. It looks a little different from how we ran it locally because it's nicer to run flask using the command line tool that the Python image has, but you can always choose to use the `python3 app.py` command instead. We also have to specify the port to be `0.0.0.0` instead of `localhost` because we're using this sandbox environment, and need PWD to plug in the real IP address we're using.
     ```
     CMD ["flask", "run", "--host=0.0.0.0"]
     ```

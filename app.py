@@ -7,4 +7,4 @@ def hello():
     return '<h1>CUWIC Docker Workshop</h1><p>Hi, my name is [...]</p>'
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)

@@ -21,9 +21,11 @@ Docker is hands-down the most popular containerization tool used in industry tod
     
     a. Type `python3 app.py` in your terminal. What do you get as output? It's usually one of these outcomes:
         
-        i. No module named `flask`
-        ii. Serves Flask app but with `WARNING: This is a development server. Do not use it in a production deployment.`
-        iii. Serves Flask app with no warnings, environment set to `development`
+      i. No module named `flask`
+
+      ii. Serves Flask app but with `WARNING: This is a development server. Do not use it in a production deployment.`
+
+      iii. Serves Flask app with no warnings, environment set to `development`
 
     b. Annoying, isn't it? Based on the machine we're running this on, we get all sorts of different output when we try to run it, because all of our development environments are configured differently.
 
@@ -34,7 +36,7 @@ Docker is hands-down the most popular containerization tool used in industry tod
 mkdir my-app && cd my-app
 ```
 
-4. Let's upload our app code. Drag-and-drop this repository, `Docker-Workshop`, from your local file system onto the terminal. You should see a bar at the top indicating that you files are loading (note: a lot of extra Git/Github files will be included too).
+4. Let's upload our app code. Drag-and-drop `app.py` from your local file system's `Docker-Workshop` repo onto the terminal. You should see a bar at the top indicating that you files are loading.
 
 5. Now, we will create a `Dockerfile`, which is basically a list of instructions for Docker to note when creating an image for your app. Execute `touch Dockerfile`. Make sure there is no extention to the file name (i.e. don't have .txt).
 
@@ -43,12 +45,13 @@ mkdir my-app && cd my-app
     a. Start with a root image provided by Docker. Since we are only using Python for our app, using the standard Python image works well here. Add the following to your  `Dockerfile`:
     ```
     FROM python:3.7-alpine
+    ADD . /code
     WORKDIR /code
     ```
 
     b. Now that our image has Python3, let's get the necessary Python3 library: `flask`.
     ```
-    RUN pip install flask
+    RUN pip3 install flask
     ```
 
     c. Now let's configure our Flask app to run in the development environment to avoid errors. Add:
@@ -64,7 +67,7 @@ mkdir my-app && cd my-app
 
     e. Last but not least, we specify what command to use to run the app.
     ```
-    CMD ["python", "app.py"]
+    CMD ["flask", "run", "--host=0.0.0.0"]
     ```
 
 7. Our image specifications are now good to go! Navigate out of the `my-app` directory using `cd ..`. Then, execute the following command, which basically takes our instructions outlined in our Dockerfile and creates the actual Docker image:
@@ -72,9 +75,11 @@ mkdir my-app && cd my-app
 docker image build my-app
 ```
 
-    a. You might see a warning pop up about using pip with root -- don't worry about that, that's just a sandbox issue.
+  a. You might see a warning pop up about using pip with root -- don't worry about that, that's just a sandbox issue.
   
-    b. You should see "Successfully built XXXXX" at the bottom of the output. Alternatively, you can check if your image build was successful using `docker image ls`, which lists all local docker images. The same XXXXX ID should show up!
+  b. You should see "Successfully built XXXXX" at the bottom of the output. Alternatively, you can check if your image build was successful using `docker image ls`, which lists all local docker images. The same XXXXX ID should show up!
+
+  c. Note that this first build will be the slowest -- the rest will be much faster.
 
 8. Label your image with a name and tag using the following command, where XXXXX is the Image ID specified when you do `docker image ls`:
 ```
@@ -83,10 +88,10 @@ docker image tag XXXXX my-app:latest
 
 9. Now that our image has a name, we can deploy our Flask app. Run:
 ```
-docker run my-app
+docker run -p 5000:5000 my-app
 ```
 
-10. Your site should now be good to go! Click on `Open Port`, type in `5000`, and you should be able to see your site!
+10. Your site should now be good to go! Right next to `Open Port`, a button should pop up with our port number: `5000`. Click on it, and you should be able to see your site!
 
 # More Resources
 Want to learn more about containerization and Docker? Here are some great resources!
